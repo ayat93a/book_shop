@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for i in book_list %}
+    <p>
+        <ul> 
+            <li>
+                {{i.title}} *---* {{i.author}} 
+            </li>
+        </ul>
+        
+    </p>
+
+    {% endfor %}
+{% endblock %}
