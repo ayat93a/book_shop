@@ -19,12 +19,13 @@ jobs:
 
     - name: Package Django app
       run: poetry build
+      working-directory: ${{ github.workspace }}/book-shop
 
     - name: Upload dist artifacts
       uses: actions/upload-artifact@v4
       with:
         name: django-dist
-        path: book_shop/dist/*
+        path: book-shop/dist/*
 
   build:
     runs-on: ubuntu-latest
@@ -37,7 +38,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: django-dist
-        path: dist
+        path: book-shop/dist
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
@@ -46,7 +47,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build Docker image (with packaged app)
-      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
+      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }} book-shop
 
     - name: Push Docker image
       run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
